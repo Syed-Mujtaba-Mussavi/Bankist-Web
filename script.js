@@ -56,12 +56,31 @@ btnScrollTo.addEventListener('click', function (e) {
 });
 /////////////////////////
 // Page Navigation
-document.querySelectorAll('.nav__link').forEach(function (el) {
-  el.addEventListener('click', function (e) {
-    e.preventDefault();
-    const id = this.getAttribute('href');
+
+// Not good practice
+// document.querySelectorAll('.nav__link').forEach(function (el) {
+//   el.addEventListener('click', function (e) {
+//     e.preventDefault();
+//     const id = this.getAttribute('href');
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+//     console.log(id);
+//   });
+// });
+
+// Better Way
+// Event Delegation
+// 1.Add event listner to common parent element
+// 2.Determine what element originated the event
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+  // console.log(e.target);
+  // Matching Strategy
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
-  });
+    console.log(id);
+    // console.log('link');
+  }
 });
 ///////////////////////
 ///////////////////////////
@@ -154,12 +173,13 @@ logo.classList.contains('c');
  */
 
 // ----
-const h1 = document.querySelector('h1');
-const alerth1 = function (e) {
-  alert('addeventlistener: Great! You are reading the heading');
-};
-h1.addEventListener('mouseenter', alerth1);
-setTimeout(() => h1.removeEventListener('mouseenter', alerth1), 3000);
+// const h1 = document.querySelector('h1');
+// const alerth1 = function (e) {
+//   alert('addeventlistener: Great! You are reading the heading');
+// };
+// h1.addEventListener('mouseenter', alerth1);
+// setTimeout(() => h1.removeEventListener('mouseenter', alerth1), 3000);
+
 // Old school way to listen events is onevent property
 // h1.onmouseenter = function (e) {
 //   alert('addeventlistener: Great! You are reading the heading');
@@ -192,14 +212,32 @@ console.log(randomColor(0, 255));
 //   console.log('nav', e.target, e.currentTarget);
 // });
 
-const alex = {
-  age: 18,
-  country: 'canada',
-  printAge: () => {
-    console.log(`Age: ${this.age}`);
-  },
-};
+const h1 = document.querySelector('h1');
 
-const peter = alex;
-peter.age = 27;
-peter.printAge();
+// Going downward: child
+console.log(h1.querySelectorAll('.highlight'));
+console.log(h1.childNodes);
+console.log(h1.children);
+h1.firstElementChild.style.color = 'white';
+h1.lastElementChild.style.color = 'orangered';
+
+// going Upwards: Parents
+console.log(h1.parentNode);
+console.log(h1.parentElement);
+
+h1.closest('.header').style.background = 'var(--gradient-secondary)';
+
+h1.closest('h1').style.background = 'var(--gradient-primary)';
+
+// Going sideways: Siblings
+console.log(h1.previousElementSibling);
+console.log(h1.nextElementSibling);
+
+console.log(h1.previousSibling);
+console.log(h1.nextSibling);
+
+// trick to get all the siblings
+console.log(h1.parentElement.children);
+[...h1.parentElement.children].forEach(function (el) {
+  if (el !== h1) el.style.transform = 'scale(0.8)';
+});
